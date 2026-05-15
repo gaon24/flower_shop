@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}Корзина{% endblock %}
+
+{% block content %}
+<h1 class="page-title">🛒 Моя корзина</h1>
+
+{% if cart_items %}
+    <div class="cart-table">
+        <table>
+            <thead>
+                <tr>
+                    <th>Товар</th>
+                    <th>Название</th>
+                    <th>Цена</th>
+                    <th>Количество</th>
+                    <th>Сумма</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in cart_items %}
+                <tr>
+                    <td class="cart-image">{{ item.image }}</td>
+                    <td>{{ item.name }}</td>
+                    <td>{{ item.price }} ₽</td>
+                    <td>
+                        <form action="/update_cart" method="POST" style="display: flex; gap: 5px;">
+                            <input type="hidden" name="flower_id" value="{{ item.id }}">
+                            <input type="number" name="quantity" value="{{ item.quantity }}" min="0" max="99" style="width: 60px; padding: 5px;">
+                            <button type="submit" class="update-btn">Обновить</button>
+                        </form>
+                    </td>
+                    <td>{{ item.subtotal }} ₽</td>
+                    <td>
+                        <a href="/remove_from_cart/{{ item.id }}" class="remove-btn" onclick="return confirm('Удалить товар?')">❌</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+        <div class="cart-total">
+            <h3>Итого: {{ total }} ₽</h3>
+            <a href="/checkout" class="checkout-btn">💰 Перейти к оплате</a>
+            <a href="/catalog" class="continue-btn">🛍️ Продолжить покупки</a>
+        </div>
+    </div>
+{% else %}
+    <div class="empty-cart">
+        <p>🛒 Корзина пуста</p>
+        <a href="/catalog" class="btn">Перейти в каталог</a>
+    </div>
+{% endif %}
+{% endblock %}

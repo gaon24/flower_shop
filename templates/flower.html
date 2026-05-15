@@ -1,0 +1,250 @@
+{% extends "base.html" %}
+
+{% block title %}Цветы во флористике{% endblock %}
+
+{% block content %}
+<div class="flower-catalog-header">
+    <h1 class="page-title">🌺 ЦВЕТЫ ВО ФЛОРИСТИКЕ 🌺</h1>
+    <p class="subtitle">Выберите цветы для создания своего идеального букета</p>
+</div>
+
+<div class="flower-grid">
+    {% for flower in flowers %}
+    <div class="flower-card" data-id="{{ flower.id }}" data-name="{{ flower.name }}" data-price="{{ flower.price }}">
+        <div class="flower-card-image">
+            <span class="flower-emoji-large">{{ flower.image }}</span>
+        </div>
+        <div class="flower-card-content">
+            <h3 class="flower-card-title">{{ flower.name }}</h3>
+            <p class="flower-card-desc">{{ flower.description }}</p>
+            <div class="flower-card-footer">
+                <span class="flower-card-price">{{ flower.price }} ₽</span>
+                <div class="flower-card-actions">
+                    <button class="qty-minus" data-id="{{ flower.id }}">-</button>
+                    <span class="qty-value" id="qty-{{ flower.id }}">0</span>
+                    <button class="qty-plus" data-id="{{ flower.id }}">+</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Панель сборки букета (фиксированная внизу) -->
+<div class="bouquet-bar" id="bouquetBar">
+    <div class="bouquet-bar-content">
+        <div class="bouquet-bar-info">
+            <span class="bouquet-icon">💐</span>
+            <span class="bouquet-label">Ваш букет:</span>
+            <span id="bouquet-count">0</span> цветов |
+            <span id="bouquet-total">0</span> ₽
+        </div>
+        <div class="bouquet-bar-actions">
+            <button id="viewBouquetBtn" class="bouquet-view-btn">📋 Посмотреть букет</button>
+            <button id="clearBouquetBtn" class="bouquet-clear-btn">🗑️ Очистить</button>
+            <button id="orderBouquetBtn" class="bouquet-order-btn">✅ Заказать</button>
+        </div>
+    </div>
+</div>
+
+<!-- Модальное окно для просмотра букета -->
+<div id="bouquetModal" class="modal">
+    <div class="modal-content">
+        <span class="modal-close">&times;</span>
+        <h2>💐 Ваш букет</h2>
+        <div id="modalBouquetList" class="modal-bouquet-list"></div>
+        <div class="modal-total">
+            <strong>Итого: <span id="modalTotal">0</span> ₽</strong>
+        </div>
+        <button id="modalOrderBtn" class="checkout-btn">✅ Оформить заказ</button>
+    </div>
+</div>
+
+<script>
+    // Состояние корзины букета
+    let bouquet = {};
+
+    // Получаем данные о цветах из таблицы (через data-атрибуты)
+    const flowerCards = document.querySelectorAll('.flower-card');
+    const bouquetCountSpan = document.getElementById('bouquet-count');
+    const bouquetTotalSpan = document.getElementById('bouquet-total');
+    const clearBtn = document.getElementById('clearBouquetBtn');
+    const orderBtn = document.getElementById('orderBouquetBtn');
+    const viewBtn = document.getElementById('viewBouquetBtn');
+    const modal = document.getElementById('bouquetModal');
+    const modalClose = document.querySelector('.modal-close');
+    const modalBouquetList = document.getElementById('modalBouquetList');
+    const modalTotalSpan = document.getElementById('modalTotal');
+    const modalOrderBtn = document.getElementById('modalOrderBtn');
+
+    // Функция обновления отображения (нижняя панель)
+    function updateBouquetBar() {
+        let totalCount = 0;
+        let totalSum = 0;
+        for (const id in bouquet) {
+            totalCount += bouquet[id].quantity;
+            totalSum += bouquet[id].quantity * bouquet[id].price;
+        }
+        bouquetCountSpan.textContent = totalCount;
+        bouquetTotalSpan.textContent = totalSum;
+        
+        // Обновляем значения в карточках
+        for (const id in bouquet) {
+            const qtySpan = document.getElementById(`qty-${id}`);
+            if (qtySpan) qtySpan.textContent = bouquet[id].quantity;
+        }
+        // Обнуляем те, которых нет в букете
+        flowerCards.forEach(card => {
+            const id = card.dataset.id;
+            if (!bouquet[id]) {
+                const qtySpan = document.getElementById(`qty-${id}`);
+                if (qtySpan) qtySpan.textContent = '0';
+            }
+        });
+    }
+
+    // Добавить цветок
+    function addFlower(id, name, price) {
+        if (bouquet[id]) {
+            bouquet[id].quantity++;
+        } else {
+            bouquet[id] = { name: name, price: price, quantity: 1 };
+        }
+        updateBouquetBar();
+    }
+
+    // Удалить один цветок
+    function removeFlower(id) {
+        if (bouquet[id]) {
+            bouquet[id].quantity--;
+            if (bouquet[id].quantity <= 0) {
+                delete bouquet[id];
+            }
+        }
+        updateBouquetBar();
+    }
+
+    // Очистить весь букет
+    function clearBouquet() {
+        if (confirm('Вы уверены, что хотите очистить весь букет?')) {
+            bouquet = {};
+            updateBouquetBar();
+        }
+    }
+
+    // Показать модальное окно с содержимым букета
+    function showBouquetModal() {
+        const hasItems = Object.keys(bouquet).length > 0;
+        if (!hasItems) {
+            alert('Ваш букет пуст. Добавьте цветы!');
+            return;
+        }
+        
+        modalBouquetList.innerHTML = '';
+        let total = 0;
+        for (const id in bouquet) {
+            const item = bouquet[id];
+            const itemTotal = item.price * item.quantity;
+            total += itemTotal;
+            const div = document.createElement('div');
+            div.className = 'modal-bouquet-item';
+            div.innerHTML = `
+                <div class="modal-item-info">
+                    <span class="modal-item-name">${item.name}</span>
+                    <span class="modal-item-qty">x${item.quantity}</span>
+                    <span class="modal-item-price">${item.price} ₽</span>
+                    <span class="modal-item-subtotal">= ${itemTotal} ₽</span>
+                </div>
+                <div class="modal-item-actions">
+                    <button class="modal-remove-one" data-id="${id}">➖</button>
+                    <button class="modal-remove-all" data-id="${id}">❌</button>
+                </div>
+            `;
+            modalBouquetList.appendChild(div);
+        }
+        modalTotalSpan.textContent = total;
+        
+        // Добавляем обработчики для кнопок в модальном окне
+        document.querySelectorAll('.modal-remove-one').forEach(btn => {
+            btn.onclick = () => {
+                const id = btn.dataset.id;
+                removeFlower(id);
+                showBouquetModal(); // обновляем модальное окно
+                updateBouquetBar();
+            };
+        });
+        document.querySelectorAll('.modal-remove-all').forEach(btn => {
+            btn.onclick = () => {
+                const id = btn.dataset.id;
+                delete bouquet[id];
+                updateBouquetBar();
+                showBouquetModal();
+            };
+        });
+        
+        modal.style.display = 'flex';
+    }
+
+    // Закрыть модальное окно
+    function closeModal() {
+        modal.style.display = 'none';
+    }
+
+    // Оформить заказ
+    function placeOrder() {
+        const hasItems = Object.keys(bouquet).length > 0;
+        if (!hasItems) {
+            alert('Ваш букет пуст!');
+            return;
+        }
+        
+        let orderText = "🌸 МОЙ БУКЕТ 🌸\n\n";
+        let total = 0;
+        for (const id in bouquet) {
+            const item = bouquet[id];
+            const itemTotal = item.price * item.quantity;
+            total += itemTotal;
+            orderText += `${item.name} x${item.quantity} = ${itemTotal} ₽\n`;
+        }
+        orderText += `\n💵 ИТОГО: ${total} ₽\n\nСпасибо за заказ! 🌷`;
+        alert(orderText);
+        
+        // Очищаем букет после заказа
+        bouquet = {};
+        updateBouquetBar();
+        closeModal();
+    }
+
+    // Навешиваем обработчики на кнопки + и - в карточках
+    flowerCards.forEach(card => {
+        const id = card.dataset.id;
+        const name = card.dataset.name;
+        const price = parseInt(card.dataset.price);
+        
+        const minusBtn = card.querySelector('.qty-minus');
+        const plusBtn = card.querySelector('.qty-plus');
+        
+        if (plusBtn) {
+            plusBtn.addEventListener('click', () => addFlower(id, name, price));
+        }
+        if (minusBtn) {
+            minusBtn.addEventListener('click', () => removeFlower(id));
+        }
+    });
+
+    // Кнопки панели
+    clearBtn.addEventListener('click', clearBouquet);
+    orderBtn.addEventListener('click', placeOrder);
+    viewBtn.addEventListener('click', showBouquetModal);
+    modalClose.addEventListener('click', closeModal);
+    modalOrderBtn.addEventListener('click', () => {
+        placeOrder();
+        closeModal();
+    });
+    
+    // Закрытие по клику вне окна
+    window.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+    });
+</script>
+{% endblock %}

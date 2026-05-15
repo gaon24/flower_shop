@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}Каталог{% endblock %}
+
+{% block content %}
+<h1 class="page-title">🌷 Наш каталог букетов 🌷</h1>
+
+<div class="catalog">
+    {% for flower in flowers %}
+    <div class="card">
+        <div class="flower-icon-large">{{ flower.image }}</div>
+        <h3>{{ flower.name }}</h3>
+        <p class="flower-color">🎨 Цвет: {{ flower.color }}</p>
+        <p class="flower-desc">{{ flower.description }}</p>
+        <p class="flower-price">{{ flower.price }} ₽</p>
+        <a href="/add_to_cart/{{ flower.id }}" class="buy-btn">🛒 В корзину</a>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

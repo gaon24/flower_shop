@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Главная{% endblock %}
+
+{% block content %}
+<div class="hero">
+    <h1>🌸 Добро пожаловать в мир цветов! 🌸</h1>
+    <p class="subtitle">Самые свежие и красивые букеты для вас и ваших близких</p>
+    <a href="/catalog" class="btn">Смотреть каталог →</a>
+</div>
+
+<div class="advantages">
+    <h2>Почему выбирают нас?</h2>
+    <div class="advantages-grid">
+        <div class="advantage">
+            <div class="advantage-icon">🚚</div>
+            <h3>Бесплатная доставка</h3>
+            <p>При заказе от 2000 рублей</p>
+        </div>
+        <div class="advantage">
+            <div class="advantage-icon">🌿</div>
+            <h3>Свежие цветы</h3>
+            <p>Цветы срезаны утром</p>
+        </div>
+        <div class="advantage">
+            <div class="advantage-icon">🎁</div>
+            <h3>Подарочная упаковка</h3>
+            <p>Красивая упаковка бесплатно</p>
+        </div>
+        <div class="advantage">
+            <div class="advantage-icon">⭐</div>
+            <h3>1000+ довольных клиентов</h3>
+            <p>Отличные отзывы</p>
+        </div>
+    </div>
+</div>
+
+<div class="bestsellers">
+    <h2>Цветы которые у нас есть</h2>
+    <div class="bestseller-list">
+        <div href="/flower" class="bestseller-item"> Цветы</div>
+    </div>
+</div>
+{% endblock %}

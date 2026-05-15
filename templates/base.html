@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мир цветов - {% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <span class="flower-icon">🌸</span>
+            <span>Мир цветов</span>
+        </div>
+        <nav>
+            <a href="/">Главная</a>
+            <a href="/catalog">Каталог</a>
+            <a href="/cart"> Корзина</a>
+            <a href="/flower">Цветы во флористике</a>
+            <a href="/contacts">Контакты</a>
+            
+        </nav>
+    </header>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <p>© 2026 Магазин цветов "Мир цветов" | Все права защищены</p>
+        <p>Доставка цветов по всему городу</p>
+    </footer>
+</body>
+</html>

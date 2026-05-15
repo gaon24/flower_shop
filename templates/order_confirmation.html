@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block title %}Заказ оформлен{% endblock %}
+
+{% block content %}
+<div class="confirmation">
+    <div class="confirmation-icon">🎉</div>
+    <h1>Спасибо за заказ, {{ name }}!</h1>
+    <p>Ваш заказ успешно оформлен.</p>
+    <p>Наш менеджер свяжется с вами в ближайшее время.</p>
+    <a href="/" class="btn">Вернуться на главную</a>
+</div>
+{% endblock %}
