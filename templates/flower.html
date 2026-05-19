@@ -12,7 +12,7 @@
     {% for flower in flowers %}
     <div class="flower-card" data-id="{{ flower.id }}" data-name="{{ flower.name }}" data-price="{{ flower.price }}">
         <div class="flower-card-image">
-            <span class="flower-emoji-large">{{ flower.image }}</span>
+            <img src="{{ flower.image_url }}" alt="{{ flower.name }}" class="flower-img">
         </div>
         <div class="flower-card-content">
             <h3 class="flower-card-title">{{ flower.name }}</h3>
@@ -36,13 +36,15 @@
         <div class="bouquet-bar-info">
             <span class="bouquet-icon">💐</span>
             <span class="bouquet-label">Ваш букет:</span>
-            <span id="bouquet-count">0</span> цветов |
+            <span id="bouquet-count">0</span> шт. |
             <span id="bouquet-total">0</span> ₽
         </div>
         <div class="bouquet-bar-actions">
+            <div class="bouquet-bar-actions">
+                <button id="clearBouquetBtn" class="bouquet-clear-btn">🗑️ Очистить</button>
+                <button id="orderBouquetBtn" class="bouquet-order-btn">✅ Заказать</button>
+            </div>
             <button id="viewBouquetBtn" class="bouquet-view-btn">📋 Посмотреть букет</button>
-            <button id="clearBouquetBtn" class="bouquet-clear-btn">🗑️ Очистить</button>
-            <button id="orderBouquetBtn" class="bouquet-order-btn">✅ Заказать</button>
         </div>
     </div>
 </div>
