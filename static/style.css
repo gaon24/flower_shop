@@ -722,7 +722,7 @@ footer p {
 }
 
 /* Стили для фото цветов */
-.flower-card-image {
+/* .flower-card-image {
     background: linear-gradient(135deg, #fff5f0 0%, #ffe8e0 100%);
     padding: 20px;
     text-align: center;
@@ -743,4 +743,21 @@ footer p {
 
 .flower-card:hover .flower-img {
     transform: scale(1.05);
+} */
+
+.flower-card {
+    display: flex;
+    flex-direction: column;
+}
+
+.flower-card-image {
+    flex: 1;
+    min-height: 200px;
+}
+
+.flower-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 15px;
 }
