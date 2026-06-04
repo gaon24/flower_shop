@@ -250,3 +250,29 @@
     });
 </script>
 {% endblock %}
+
+// Добавить сохранение букета
+function saveBouquet() {
+    localStorage.setItem('savedBouquet', JSON.stringify(bouquet));
+    alert('💾 Букет сохранен!');
+}
+
+// Загрузить сохраненный букет
+function loadBouquet() {
+    const saved = localStorage.getItem('savedBouquet');
+    if (saved) {
+        bouquet = JSON.parse(saved);
+        updateBouquetBar();
+        alert('📂 Букет загружен!');
+    }
+}
+
+// Рассчитать скидку (каждый 5-й цветок бесплатно)
+function calculateDiscount() {
+    let totalCount = 0;
+    for (const id in bouquet) {
+        totalCount += bouquet[id].quantity;
+    }
+    const freeFlowers = Math.floor(totalCount / 5);
+    return freeFlowers;
+}

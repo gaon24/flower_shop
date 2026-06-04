@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}Админ-панель{% endblock %}
+
+{% block content %}
+<h1 class="page-title">👑 Админ-панель</h1>
+
+<div class="admin-tabs">
+    <button class="tab-btn active" onclick="showTab('orders')">Заказы</button>
+    <button class="tab-btn" onclick="showTab('flowers')">Цветы</button>
+    <button class="tab-btn" onclick="showTab('reviews')">Отзывы</button>
+</div>
+
+<div id="orders" class="tab-content active">
+    <h2>Новые заказы</h2>
+    <div class="orders-list">
+        <!-- Список заказов -->
+    </div>
+</div>
+
+<div id="flowers" class="tab-content">
+    <h2>Управление цветами</h2>
+    <button class="add-flower-btn">➕ Добавить цветок</button>
+    <div class="flowers-list">
+        {% for flower in flowers %}
+        <div class="admin-flower-item">
+            <img src="{{ flower.image_url }}" width="50">
+            <span>{{ flower.name }} - {{ flower.price }} ₽</span>
+            <button onclick="editFlower({{ flower.id }})">✏️</button>
+            <button onclick="deleteFlower({{ flower.id }})">🗑️</button>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

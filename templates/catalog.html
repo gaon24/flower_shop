@@ -8,7 +8,12 @@
 <div class="catalog">
     {% for flower in flowers %}
     <div class="card">
-        <div class="flower-icon-large">{{ flower.image }}</div>
+        <div class="flower-icon-large">
+            <!-- ПРОСТОЙ ВАРИАНТ - используйте прямое указание -->
+            <img src="{{ flower.image_url }}" 
+                alt="{{ flower.name }}" 
+                style="width: 200px; height: 200px; object-fit: cover; border-radius: 10px;">
+        </div>
         <h3>{{ flower.name }}</h3>
         <p class="flower-color">🎨 Цвет: {{ flower.color }}</p>
         <p class="flower-desc">{{ flower.description }}</p>
@@ -18,3 +23,9 @@
     {% endfor %}
 </div>
 {% endblock %}
+
+{% if promotion %}
+<div class="promo-banner">
+    🎉 {{ promotion.message }} 🎉
+</div>
+{% endif %}

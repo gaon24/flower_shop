@@ -761,3 +761,27 @@ footer p {
     object-fit: cover;
     border-radius: 15px;
 }
+/* Стили для изображений цветов */
+.flower-image {
+    width: 100%;
+    height: 250px;
+    overflow: hidden;
+    border-radius: 10px;
+    margin-bottom: 15px;
+}
+
+.flower-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Сохраняет пропорции, заполняя контейнер */
+    transition: transform 0.3s ease;
+}
+
+.flower-image img:hover {
+    transform: scale(1.05); /* Эффект увеличения при наведении */
+}
+
+/* Если нужно добавить тень изображению */
+.flower-image {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}

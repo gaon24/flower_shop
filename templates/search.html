@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block title %}Поиск цветов{% endblock %}
+
+{% block content %}
+<h1 class="page-title">🔍 Поиск цветов</h1>
+
+<div class="search-bar">
+    <input type="text" id="searchInput" placeholder="Введите название цветка..." onkeyup="searchFlowers()">
+    <div class="filters">
+        <select id="colorFilter" onchange="searchFlowers()">
+            <option value="">Все цвета</option>
+            <option value="белые">Белые</option>
+            <option value="розовый">Розовые</option>
+            <option value="красные">Красные</option>
+            <option value="бежевые">Бежевые</option>
+        </select>
+        <select id="priceFilter" onchange="searchFlowers()">
+            <option value="">Любая цена</option>
+            <option value="0-150">До 150 ₽</option>
+            <option value="150-200">150-200 ₽</option>
+            <option value="200+">От 200 ₽</option>
+        </select>
+    </div>
+</div>
+
+<div id="searchResults" class="catalog">
+    <!-- Результаты будут здесь -->
+</div>
+
+<script>
+    const flowers = {{ flowers|tojson }};
+    
+    function searchFlowers() {
+        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+        const colorFilter = document.getElementById('colorFilter').value;
+        const priceFilter = document.getElementById('priceFilter').value;
+        
+        const filtered = flowers.filter(flower => {
+            const matchesSearch = flower.name.toLowerCase().includes(searchTerm);
+            const matchesColor = !colorFilter || flower.color === colorFilter;
+            
+            let matchesPrice = true;
+            if (priceFilter === '0-150') matchesPrice = flower.price <= 150;
+            else if (priceFilter === '150-200') matchesPrice = flower.price >= 150 && flower.price <= 200;
+            else if (priceFilter === '200+') matchesPrice = flower.price >= 200;
+            
+            return matchesSearch && matchesColor && matchesPrice;
+        });
+        
+        displayResults(filtered);
+    }
+    
+    function displayResults(flowers) {
+        const container = document.getElementById('searchResults');
+        if (flowers.length === 0) {
+            container.innerHTML = '<p class="no-results">🌸 Цветы не найдены</p>';
+            return;
+        }
+        
+        container.innerHTML = flowers.map(flower => `
+            <div class="card">
+                <div class="flower-icon-large">
+                    <img src="${flower.image_url}" alt="${flower.name}" style="width: 200px; height: 200px; object-fit: cover; border-radius: 10px;">
+                </div>
+                <h3>${flower.name}</h3>
+                <p class="flower-color">🎨 Цвет: ${flower.color}</p>
+                <p class="flower-price">${flower.price} ₽</p>
+                <a href="/add_to_cart/${flower.id}" class="buy-btn">🛒 В корзину</a>
+            </div>
+        `).join('');
+    }
+    
+    // Показать все цветы при загрузке
+    displayResults(flowers);
+</script>
+{% endblock %}
