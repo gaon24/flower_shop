@@ -276,3 +276,16 @@ function calculateDiscount() {
     const freeFlowers = Math.floor(totalCount / 5);
     return freeFlowers;
 }
+
+let favorites = JSON.parse(localStorage.getItem('favorites') || '{}');
+
+function toggleFavorite(flowerId) {
+    if (favorites[flowerId]) {
+        delete favorites[flowerId];
+        alert('❤️ Удалено из избранного');
+    } else {
+        favorites[flowerId] = true;
+        alert('⭐ Добавлено в избранное');
+    }
+    localStorage.setItem('favorites', JSON.stringify(favorites));
+}

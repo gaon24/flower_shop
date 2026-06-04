@@ -5,27 +5,134 @@
 {% block content %}
 <h1 class="page-title">🌷 Наш каталог букетов 🌷</h1>
 
-<div class="catalog">
-    {% for flower in flowers %}
-    <div class="card">
-        <div class="flower-icon-large">
-            <!-- ПРОСТОЙ ВАРИАНТ - используйте прямое указание -->
-            <img src="{{ flower.image_url }}" 
-                alt="{{ flower.name }}" 
-                style="width: 200px; height: 200px; object-fit: cover; border-radius: 10px;">
+<div class="catalog-controls">
+    <div class="sort-controls">
+        <label>Сортировать: </label>
+        <select id="sortSelect" onchange="sortFlowers()">
+            <option value="default">По умолчанию</option>
+            <option value="price-asc">По возрастанию цены</option>
+            <option value="price-desc">По убыванию цены</option>
+            <option value="name">По названию</option>
+        </select>
+    </div>
+    <div class="category-filters">
+        <button class="category-btn active" onclick="filterCategory('all')">Все</button>
+        <button class="category-btn" onclick="filterCategory('flowers')">🌸 Цветы</button>
+        <button class="category-btn" onclick="filterCategory('bouquets')">💐 Букеты</button>
+    </div>
+    <div class="view-controls">
+        <button onclick="changeView('grid')" class="view-btn active">📱 Сетка</button>
+        <button onclick="changeView('list')" class="view-btn">📋 Список</button>
+    </div>
+</div>
+
+<div class="catalog" id="catalog">
+    {% for item in flowers %}
+    <div class="card" data-id="{{ item.id }}" data-name="{{ item.name }}" data-price="{{ item.price }}" data-type="{% if item.is_bouquet %}bouquet{% else %}flower{% endif %}">
+        <div class="flower-image">
+            {% if item.is_bouquet %}
+            <div class="bouquet-badge">💐 Букет</div>
+            {% endif %}
+            <img src="{{ item.image_url }}" 
+                 alt="{{ item.name }}"
+                 onerror="this.src='https://via.placeholder.com/200x200/FF69B4/FFFFFF?text={{ item.name }}'">
+            {% if item.price >= 3000 %}
+            <span class="premium-badge">⭐ Премиум</span>
+            {% elif item.price <= 150 %}
+            <span class="sale-badge">💝 Выгодно</span>
+            {% endif %}
         </div>
-        <h3>{{ flower.name }}</h3>
-        <p class="flower-color">🎨 Цвет: {{ flower.color }}</p>
-        <p class="flower-desc">{{ flower.description }}</p>
-        <p class="flower-price">{{ flower.price }} ₽</p>
-        <a href="/add_to_cart/{{ flower.id }}" class="buy-btn">🛒 В корзину</a>
+        <div class="card-content">
+            <h3>{{ item.name }}</h3>
+            <p class="flower-color">🎨 Цвет: {{ item.color }}</p>
+            <p class="flower-desc">{{ item.description }}</p>
+            <div class="card-footer">
+                <p class="flower-price">{{ item.price }} ₽</p>
+                <a href="/add_to_cart/{{ item.id }}" class="buy-btn" onclick="showNotification('{{ item.name }}')">
+                    🛒 В корзину
+                </a>
+            </div>
+        </div>
     </div>
     {% endfor %}
 </div>
-{% endblock %}
 
-{% if promotion %}
-<div class="promo-banner">
-    🎉 {{ promotion.message }} 🎉
-</div>
-{% endif %}
+<script>
+function sortFlowers() {
+    const sortBy = document.getElementById('sortSelect').value;
+    const catalog = document.getElementById('catalog');
+    const cards = Array.from(document.querySelectorAll('.card'));
+    
+    cards.sort((a, b) => {
+        if (sortBy === 'price-asc') {
+            return parseInt(a.dataset.price) - parseInt(b.dataset.price);
+        } else if (sortBy === 'price-desc') {
+            return parseInt(b.dataset.price) - parseInt(a.dataset.price);
+        } else if (sortBy === 'name') {
+            return a.dataset.name.localeCompare(b.dataset.name);
+        }
+        return 0;
+    });
+    
+    catalog.innerHTML = '';
+    cards.forEach(card => catalog.appendChild(card));
+}
+
+function changeView(view) {
+    const catalog = document.getElementById('catalog');
+    if (view === 'list') {
+        catalog.classList.add('list-view');
+    } else {
+        catalog.classList.remove('list-view');
+    }
+    
+    document.querySelectorAll('.view-btn').forEach(btn => btn.classList.remove('active'));
+    event.target.classList.add('active');
+}
+
+function filterCategory(category) {
+    const cards = document.querySelectorAll('.card');
+    let visibleCount = 0;
+    
+    cards.forEach(card => {
+        const cardType = card.dataset.type;
+        if (category === 'all' || (category === 'flowers' && cardType === 'flower') || (category === 'bouquets' && cardType === 'bouquet')) {
+            card.style.display = 'block';
+            visibleCount++;
+        } else {
+            card.style.display = 'none';
+        }
+    });
+    
+    // Обновляем активную кнопку
+    document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
+    event.target.classList.add('active');
+    
+    // Показываем сообщение если ничего не найдено
+    const catalog = document.getElementById('catalog');
+    const noResults = document.getElementById('noResults');
+    if (visibleCount === 0) {
+        if (!noResults) {
+            const msg = document.createElement('p');
+            msg.id = 'noResults';
+            msg.className = 'no-results';
+            msg.innerHTML = '🌸 В этой категории пока нет товаров';
+            catalog.appendChild(msg);
+        }
+    } else if (noResults) {
+        noResults.remove();
+    }
+}
+
+function showNotification(itemName) {
+    const notification = document.createElement('div');
+    notification.className = 'notification';
+    notification.innerHTML = `✅ ${itemName} добавлен(а) в корзину!`;
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.remove();
+    }, 2000);
+}
+</script>
+{% endblock %}

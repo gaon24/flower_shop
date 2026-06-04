@@ -330,6 +330,169 @@ footer p {
     border-radius: 20px;
 }
 
+/* Стили для корзины */
+.cart-table table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.cart-table th, .cart-table td {
+    padding: 15px;
+    text-align: center;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.cart-table th {
+    background-color: #ff6b8b;
+    color: white;
+    font-weight: bold;
+}
+
+.cart-table tr:hover {
+    background-color: #fff5f0;
+}
+
+.cart-image img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 2px solid #ffd6e0;
+}
+
+.quantity-input {
+    width: 60px;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.update-btn {
+    background-color: #ffb347;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.update-btn:hover {
+    background-color: #ff9400;
+}
+
+.remove-btn {
+    text-decoration: none;
+    font-size: 24px;
+    opacity: 0.7;
+    transition: opacity 0.3s;
+}
+
+.remove-btn:hover {
+    opacity: 1;
+}
+
+.subtotal {
+    font-weight: bold;
+    color: #ff6b8b;
+}
+
+.cart-total {
+    margin-top: 30px;
+    padding: 25px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.total-info h3 {
+    font-size: 24px;
+    color: #333;
+}
+
+.total-amount {
+    color: #ff6b8b;
+    font-size: 28px;
+}
+
+.delivery-note {
+    color: #4CAF50;
+    margin-top: 5px;
+    font-size: 14px;
+}
+
+.cart-buttons {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.checkout-btn, .continue-btn, .clear-cart-btn {
+    display: inline-block;
+    padding: 12px 25px;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: all 0.3s;
+}
+
+.checkout-btn {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.checkout-btn:hover {
+    background-color: #45a049;
+    transform: translateY(-2px);
+}
+
+.continue-btn {
+    background-color: #ff6b8b;
+    color: white;
+}
+
+.continue-btn:hover {
+    background-color: #e85d7a;
+    transform: translateY(-2px);
+}
+
+.clear-cart-btn {
+    background-color: #ff4444;
+    color: white;
+}
+
+.clear-cart-btn:hover {
+    background-color: #cc0000;
+    transform: translateY(-2px);
+}
+
+.empty-cart {
+    text-align: center;
+    padding: 60px;
+    background: white;
+    border-radius: 20px;
+}
+
+.empty-cart-icon {
+    font-size: 80px;
+    margin-bottom: 20px;
+}
+
+.empty-cart-suggestion {
+    color: #999;
+    margin: 10px 0 30px;
+}
+
 /* Оформление заказа */
 .checkout-grid {
     display: flex;
@@ -784,4 +947,170 @@ footer p {
 /* Если нужно добавить тень изображению */
 .flower-image {
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+/* Добавьте в style.css */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.card {
+    animation: fadeIn 0.5s ease-out;
+}
+
+/* Уведомления */
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #4CAF50;
+    color: white;
+    padding: 15px 25px;
+    border-radius: 10px;
+    z-index: 3000;
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+    from { transform: translateX(100%); }
+    to { transform: translateX(0); }
+}
+
+    .search-container {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+    
+    .search-bar {
+        background: white;
+        padding: 25px;
+        border-radius: 20px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        margin-bottom: 30px;
+    }
+    
+    .search-input {
+        width: 100%;
+        padding: 15px;
+        font-size: 18px;
+        border: 2px solid #ffd6e0;
+        border-radius: 50px;
+        outline: none;
+        transition: border-color 0.3s;
+        margin-bottom: 15px;
+    }
+    
+    .search-input:focus {
+        border-color: #ff6b8b;
+    }
+    
+    .filters {
+        display: flex;
+        gap: 15px;
+        flex-wrap: wrap;
+    }
+    
+    .filter-select {
+        flex: 1;
+        padding: 10px 15px;
+        font-size: 16px;
+        border: 1px solid #ddd;
+        border-radius: 25px;
+        background: white;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+    
+    .filter-select:hover {
+        border-color: #ff6b8b;
+    }
+    
+    .no-results {
+        text-align: center;
+        padding: 50px;
+        font-size: 20px;
+        color: #999;
+        background: white;
+        border-radius: 20px;
+    }
+    
+    .result-count {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #ff6b8b;
+        font-size: 16px;
+    }
+
+    /* Стили для фото в корзине */
+.cart-image img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 1px solid #ffd6e0;
+}
+
+.cart-table td {
+    vertical-align: middle;
+}
+
+/* Категории фильтров */
+.category-filters {
+    display: flex;
+    gap: 10px;
+}
+
+.category-btn {
+    padding: 8px 20px;
+    border: 1px solid #ff6b8b;
+    background: white;
+    color: #ff6b8b;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.category-btn.active {
+    background: #ff6b8b;
+    color: white;
+}
+
+.category-btn:hover {
+    background: #ff6b8b;
+    color: white;
+}
+
+/* Бейдж для букетов */
+.bouquet-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: linear-gradient(135deg, #9b59b6, #8e44ad);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+    z-index: 1;
+}
+
+/* Бейджи для цен */
+.premium-badge, .sale-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+    color: white;
+}
+
+.premium-badge {
+    background: linear-gradient(135deg, #FFD700, #FFA500);
+}
+
+.sale-badge {
+    background: linear-gradient(135deg, #4CAF50, #45a049);
 }

@@ -5,30 +5,35 @@
 {% block content %}
 <h1 class="page-title">🔍 Поиск цветов</h1>
 
-<div class="search-bar">
-    <input type="text" id="searchInput" placeholder="Введите название цветка..." onkeyup="searchFlowers()">
-    <div class="filters">
-        <select id="colorFilter" onchange="searchFlowers()">
-            <option value="">Все цвета</option>
-            <option value="белые">Белые</option>
-            <option value="розовый">Розовые</option>
-            <option value="красные">Красные</option>
-            <option value="бежевые">Бежевые</option>
-        </select>
-        <select id="priceFilter" onchange="searchFlowers()">
-            <option value="">Любая цена</option>
-            <option value="0-150">До 150 ₽</option>
-            <option value="150-200">150-200 ₽</option>
-            <option value="200+">От 200 ₽</option>
-        </select>
+<div class="search-container">
+    <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="Введите название цветка..." onkeyup="searchFlowers()" class="search-input">
+        
+        <div class="filters">
+            <select id="colorFilter" onchange="searchFlowers()" class="filter-select">
+                <option value="">🎨 Все цвета</option>
+                <option value="белые">🤍 Белые</option>
+                <option value="розовый">💗 Розовые</option>
+                <option value="красные">❤️ Красные</option>
+                <option value="бежевые">🤎 Бежевые</option>
+            </select>
+            
+            <select id="priceFilter" onchange="searchFlowers()" class="filter-select">
+                <option value="">💰 Любая цена</option>
+                <option value="0-150">До 150 ₽</option>
+                <option value="150-200">150-200 ₽</option>
+                <option value="200+">От 200 ₽</option>
+            </select>
+        </div>
+    </div>
+    
+    <div id="searchResults" class="catalog">
+        <!-- Результаты будут здесь -->
     </div>
 </div>
 
-<div id="searchResults" class="catalog">
-    <!-- Результаты будут здесь -->
-</div>
-
 <script>
+    // Передаем данные о цветах из Flask в JavaScript
     const flowers = {{ flowers|tojson }};
     
     function searchFlowers() {
@@ -36,14 +41,25 @@
         const colorFilter = document.getElementById('colorFilter').value;
         const priceFilter = document.getElementById('priceFilter').value;
         
-        const filtered = flowers.filter(flower => {
+        let filtered = flowers.filter(flower => {
+            // Поиск по названию
             const matchesSearch = flower.name.toLowerCase().includes(searchTerm);
-            const matchesColor = !colorFilter || flower.color === colorFilter;
             
+            // Фильтр по цвету
+            let matchesColor = true;
+            if (colorFilter) {
+                matchesColor = flower.color === colorFilter;
+            }
+            
+            // Фильтр по цене
             let matchesPrice = true;
-            if (priceFilter === '0-150') matchesPrice = flower.price <= 150;
-            else if (priceFilter === '150-200') matchesPrice = flower.price >= 150 && flower.price <= 200;
-            else if (priceFilter === '200+') matchesPrice = flower.price >= 200;
+            if (priceFilter === '0-150') {
+                matchesPrice = flower.price <= 150;
+            } else if (priceFilter === '150-200') {
+                matchesPrice = flower.price >= 150 && flower.price <= 200;
+            } else if (priceFilter === '200+') {
+                matchesPrice = flower.price >= 200;
+            }
             
             return matchesSearch && matchesColor && matchesPrice;
         });
@@ -51,27 +67,42 @@
         displayResults(filtered);
     }
     
-    function displayResults(flowers) {
+    function displayResults(flowersList) {
         const container = document.getElementById('searchResults');
-        if (flowers.length === 0) {
-            container.innerHTML = '<p class="no-results">🌸 Цветы не найдены</p>';
+        
+        if (flowersList.length === 0) {
+            container.innerHTML = '<div class="no-results">🌸 Цветы не найдены<br>Попробуйте изменить параметры поиска</div>';
             return;
         }
         
-        container.innerHTML = flowers.map(flower => `
+        // Добавляем счетчик результатов
+        const resultCount = document.createElement('div');
+        resultCount.className = 'result-count';
+        resultCount.innerHTML = `Найдено ${flowersList.length} цветков`;
+        
+        // Создаем карточки цветов
+        const cardsHtml = flowersList.map(flower => `
             <div class="card">
                 <div class="flower-icon-large">
-                    <img src="${flower.image_url}" alt="${flower.name}" style="width: 200px; height: 200px; object-fit: cover; border-radius: 10px;">
+                    <img src="${flower.image_url}" 
+                         alt="${flower.name}" 
+                         style="width: 200px; height: 200px; object-fit: cover; border-radius: 10px;"
+                         onerror="this.src='/static/photo/default.jpg'">
                 </div>
                 <h3>${flower.name}</h3>
                 <p class="flower-color">🎨 Цвет: ${flower.color}</p>
+                ${flower.description ? `<p class="flower-desc">${flower.description}</p>` : ''}
                 <p class="flower-price">${flower.price} ₽</p>
                 <a href="/add_to_cart/${flower.id}" class="buy-btn">🛒 В корзину</a>
             </div>
         `).join('');
+        
+        container.innerHTML = resultCount.outerHTML + cardsHtml;
     }
     
-    // Показать все цветы при загрузке
-    displayResults(flowers);
+    // Показать все цветы при загрузке страницы
+    document.addEventListener('DOMContentLoaded', function() {
+        searchFlowers();
+    });
 </script>
 {% endblock %}
