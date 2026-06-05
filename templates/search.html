@@ -105,4 +105,19 @@
         searchFlowers();
     });
 </script>
+
+<div class="search-panel">
+    <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Поиск цветов по названию..." onkeyup="searchFlowers()">
+    </div>
+
+    <div class="filter-tags" id="colorFilter">
+        <button class="tag active" data-color="all" onclick="selectTag(this, 'color')">Все цвета</button>
+        <button class="tag" data-color="белые" onclick="selectTag(this, 'color')">🤍 Белые</button>
+        <button class="tag" data-color="розовый" onclick="selectTag(this, 'color')">💗 Розовые</button>
+        <button class="tag" data-color="красные" onclick="selectTag(this, 'color')">❤️ Красные</button>
+    </div>
+</div>
+
+
 {% endblock %}

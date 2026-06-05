@@ -28,6 +28,7 @@
 
 <div class="catalog" id="catalog">
     {% for item in flowers %}
+    
     <div class="card" data-id="{{ item.id }}" data-name="{{ item.name }}" data-price="{{ item.price }}" data-type="{% if item.is_bouquet %}bouquet{% else %}flower{% endif %}">
         <div class="flower-image">
             {% if item.is_bouquet %}
@@ -41,7 +42,11 @@
             {% elif item.price <= 150 %}
             <span class="sale-badge">💝 Выгодно</span>
             {% endif %}
-        </div>
+        </div><button class="fav-btn" 
+        data-id="{{ item.id }}" 
+        onclick="toggleFavorite('{{ item.id }}')">
+        🤍
+    </button>
         <div class="card-content">
             <h3>{{ item.name }}</h3>
             <p class="flower-color">🎨 Цвет: {{ item.color }}</p>
@@ -56,6 +61,8 @@
     </div>
     {% endfor %}
 </div>
+
+
 
 <script>
 function sortFlowers() {
@@ -135,4 +142,41 @@ function showNotification(itemName) {
     }, 2000);
 }
 </script>
+
+<script>
+// Функция переключения статуса "Избранное"
+function toggleFavorite(id) {
+    let favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+    
+    if (favorites.includes(id)) {
+        // Удаляем из избранного
+        favorites = favorites.filter(item => item !== id);
+    } else {
+        // Добавляем в избранное
+        favorites.push(id);
+    }
+    
+    localStorage.setItem('favorites', JSON.stringify(favorites));
+    updateHeartIcons();
+}
+
+// Обновление иконок сердечек при загрузке страницы
+function updateHeartIcons() {
+    const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+    document.querySelectorAll('.fav-btn').forEach(btn => {
+        const id = btn.getAttribute('data-id');
+        if (favorites.includes(id)) {
+            btn.innerHTML = '❤️';
+            btn.classList.add('active');
+        } else {
+            btn.innerHTML = '🤍';
+            btn.classList.remove('active');
+        }
+    });
+}
+
+// Запускаем при загрузке страницы
+document.addEventListener('DOMContentLoaded', updateHeartIcons);
+</script>
 {% endblock %}
+

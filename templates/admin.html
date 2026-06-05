@@ -33,3 +33,26 @@
     </div>
 </div>
 {% endblock %}
+
+<div id="flowers" class="tab-content">
+    <h2>Управление цветами</h2>
+    
+    <form action="/admin/add" method="POST" class="admin-form">
+        <input type="text" name="name" placeholder="Название" required>
+        <input type="number" name="price" placeholder="Цена" required>
+        <input type="text" name="color" placeholder="Цвет">
+        <input type="text" name="image_url" placeholder="URL картинки">
+        <textarea name="description" placeholder="Описание"></textarea>
+        <button type="submit">➕ Добавить цветок</button>
+    </form>
+
+    <div class="flowers-list">
+        {% for flower in flowers %}
+        <div class="admin-flower-item">
+            <img src="{{ flower.image_url }}" width="50">
+            <span>{{ flower.name }} - {{ flower.price }} ₽</span>
+            <a href="/admin/delete/{{ flower.id }}" onclick="return confirm('Удалить?')">🗑️</a>
+        </div>
+        {% endfor %}
+    </div>
+</div>

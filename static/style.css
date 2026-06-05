@@ -1055,30 +1055,56 @@ footer p {
     vertical-align: middle;
 }
 
-/* Категории фильтров */
-.category-filters {
+/* Плавное появление карточек */
+.card {
+    transition: all 0.4s ease-in-out;
+    opacity: 1;
+    transform: scale(1);
+}
+
+.card.hidden {
+    display: none !important;
+    opacity: 0;
+    transform: scale(0.8);
+}
+
+.search-panel {
+    background: #fff;
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    margin-bottom: 30px;
+}
+
+.search-box input {
+    width: 100%;
+    padding: 15px 25px;
+    border: none;
+    background: #fef0f4;
+    border-radius: 15px;
+    font-size: 16px;
+    margin-bottom: 15px;
+}
+
+.filter-tags {
     display: flex;
     gap: 10px;
+    overflow-x: auto; /* Прокрутка, если тегов много */
 }
 
-.category-btn {
-    padding: 8px 20px;
-    border: 1px solid #ff6b8b;
+.tag {
+    padding: 8px 16px;
+    border-radius: 20px;
+    border: 1px solid #ffd6e0;
     background: white;
-    color: #ff6b8b;
-    border-radius: 25px;
     cursor: pointer;
-    transition: all 0.3s;
+    transition: 0.3s;
 }
 
-.category-btn.active {
+.tag.active {
     background: #ff6b8b;
     color: white;
-}
-
-.category-btn:hover {
-    background: #ff6b8b;
-    color: white;
+    border-color: #ff6b8b;
 }
 
 /* Бейдж для букетов */
@@ -1113,4 +1139,79 @@ footer p {
 
 .sale-badge {
     background: linear-gradient(135deg, #4CAF50, #45a049);
+}
+
+.fav-btn {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.fav-btn:hover {
+    transform: scale(1.2);
+}
+
+.fav-btn.active {
+    color: #ff4d6d;
+}
+
+/* Очистка и сетка */
+.catalog {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 30px;
+    padding: 20px;
+}
+
+/* Карточка товара в стиле примера */
+.card {
+    background: #ffffff;
+    border-radius: 25px; /* Сильное скругление */
+    padding: 20px;
+    box-shadow: 0 4px 15px rgba(255, 107, 139, 0.1); /* Легкая розовая тень */
+    transition: transform 0.3s ease;
+    text-align: center;
+    border: 1px solid #fff0f3;
+}
+
+.card:hover {
+    transform: translateY(-10px);
+}
+
+.card img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    border-radius: 20px;
+    margin-bottom: 15px;
+}
+
+.card h3 {
+    margin: 10px 0;
+    font-size: 1.4rem;
+    color: #4a4a4a;
+}
+
+.card .flower-price {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #ff6b8b;
+    margin: 10px 0;
+}
+
+.buy-btn {
+    display: inline-block;
+    background: #ff6b8b;
+    color: white;
+    padding: 10px 25px;
+    border-radius: 20px;
+    text-decoration: none;
+    margin-top: 10px;
+    transition: background 0.3s;
+}
+
+.buy-btn:hover {
+    background: #ff4d6d;
 }

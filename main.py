@@ -9,14 +9,6 @@ individual_flowers = [
      "description": "Нежные цветы с экзотической красотой", 
      "image_url": "/static/photo/Альстромерия.jpg", "is_bouquet": False},
     
-    {"id": 2, "name": "Верба", "price": 100, "color": "белые", 
-     "description": "Пушистые весенние веточки", 
-     "image_url": "/static/photo/Верба.jpg", "is_bouquet": False},
-    
-    {"id": 3, "name": "Гвоздика", "price": 150, "color": "красные", 
-     "description": "Яркие и ароматные цветы", 
-     "image_url": "/static/photo/Гвоздика.jpg", "is_bouquet": False},
-    
     {"id": 4, "name": "Георгин", "price": 180, "color": "розовый", 
      "description": "Пышные махровые цветы", 
      "image_url": "/static/photo/Георгин.jpg", "is_bouquet": False},
