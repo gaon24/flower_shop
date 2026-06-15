@@ -28,6 +28,19 @@
         </div>
     </div>
     {% endfor %}
+    <div class="progress-container">
+    <div id="progressBar" class="progress-bar" style="width: 0%;"></div>
+</div>
+<p id="progressText">Ваш букет пуст (0/20 цветов)</p>
+
+<div class="packaging-options">
+    <h3>Выберите упаковку:</h3>
+    <select id="packagingSelect" onchange="updateTotal()">
+        <option value="0">Без упаковки (0 ₽)</option>
+        <option value="150">Крафтовая бумага (+150 ₽)</option>
+        <option value="300">Праздничная лента и корзина (+300 ₽)</option>
+    </select>
+</div>
 </div>
 
 <!-- Панель сборки букета (фиксированная внизу) -->
@@ -141,6 +154,8 @@
             alert('Ваш букет пуст. Добавьте цветы!');
             return;
         }
+
+        
         
         modalBouquetList.innerHTML = '';
         let total = 0;
@@ -248,7 +263,32 @@
     window.addEventListener('click', (e) => {
         if (e.target === modal) closeModal();
     });
+
+    function updateTotal() {
+    let basePrice = 0;
+    let totalCount = 0;
+    
+    // Считаем сумму и количество
+    for (const id in bouquet) {
+        basePrice += bouquet[id].price * bouquet[id].quantity;
+        totalCount += bouquet[id].quantity;
+    }
+    
+    // Добавляем цену упаковки
+    const packagingPrice = parseInt(document.getElementById('packagingSelect').value);
+    const finalPrice = basePrice + packagingPrice;
+    
+    // Обновляем прогресс-бар (максимум 20 цветов)
+    const progress = Math.min((totalCount / 20) * 100, 100);
+    document.getElementById('progressBar').style.width = progress + '%';
+    document.getElementById('progressText').innerText = `Собрано: ${totalCount}/20 цветов`;
+    
+    // Выводим финальную цену
+    document.getElementById('totalPrice').innerText = finalPrice + ' ₽';
+}
 </script>
+
+
 {% endblock %}
 
 // Добавить сохранение букета

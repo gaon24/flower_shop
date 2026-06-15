@@ -1215,3 +1215,25 @@ footer p {
 .buy-btn:hover {
     background: #ff4d6d;
 }
+
+.progress-container {
+    width: 100%;
+    height: 10px;
+    background: #eee;
+    border-radius: 5px;
+    margin: 20px 0;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    background: #ff6b8b;
+    transition: width 0.5s ease;
+}
+
+.packaging-options {
+    background: #fff0f3;
+    padding: 15px;
+    border-radius: 15px;
+    margin-top: 20px;
+}
